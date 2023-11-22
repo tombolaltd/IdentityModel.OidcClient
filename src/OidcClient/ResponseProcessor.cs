@@ -20,8 +20,8 @@ namespace IdentityModel.OidcClient
     /// </summary>
     public class ResponseProcessor
     {
-        private readonly OidcClientOptions _options;
-        private readonly ILogger<ResponseProcessor> _logger;
+        protected readonly OidcClientOptions _options;
+        protected readonly ILogger<ResponseProcessor> _logger;
         private readonly CryptoHelper _crypto;
         private readonly Func<CancellationToken, Task> _refreshKeysAsync;
 
@@ -102,7 +102,7 @@ namespace IdentityModel.OidcClient
             };
         }
 
-        public async Task<TokenResponseValidationResult> ValidateTokenResponseAsync(TokenResponse response, AuthorizeState state, bool requireIdentityToken, CancellationToken cancellationToken = default)
+        public virtual async Task<TokenResponseValidationResult> ValidateTokenResponseAsync(TokenResponse response, AuthorizeState state, bool requireIdentityToken, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("ValidateTokenResponse");
 
