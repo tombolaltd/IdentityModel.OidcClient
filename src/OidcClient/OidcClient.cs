@@ -22,11 +22,11 @@ namespace IdentityModel.OidcClient
     /// </summary>
     public class OidcClient
     {
-        private readonly ILogger _logger;
+        protected readonly ILogger _logger;
         private readonly AuthorizeClient _authorizeClient;
 
         private readonly bool _useDiscovery;
-        private readonly ResponseProcessor _processor;
+        protected readonly ResponseProcessor _processor;
 
         /// <summary>
         /// Gets the options.
@@ -285,7 +285,7 @@ namespace IdentityModel.OidcClient
             if (accessToken.IsMissing()) throw new ArgumentNullException(nameof(accessToken));
             if (!Options.ProviderInformation.SupportsUserInfo) throw new InvalidOperationException("No userinfo endpoint specified");
 
-            var userInfoClient = Options.CreateClient();
+            var userInfoClient = Options.CreateBackchannelClient();
 
             var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
             {
@@ -326,7 +326,7 @@ namespace IdentityModel.OidcClient
             await EnsureConfigurationAsync(cancellationToken);
             backChannelParameters = backChannelParameters ?? new Parameters();
             
-            var client = Options.CreateClient();
+            var client = Options.CreateBackchannelClient();
 
             var response = await client.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
@@ -366,7 +366,7 @@ namespace IdentityModel.OidcClient
             };
         }
 
-        internal async Task EnsureConfigurationAsync(CancellationToken cancellationToken)
+        protected async Task EnsureConfigurationAsync(CancellationToken cancellationToken)
         {
             await EnsureProviderInformationAsync(cancellationToken);
 
@@ -374,7 +374,7 @@ namespace IdentityModel.OidcClient
             _logger.LogTrace(LogSerializer.Serialize(Options));
         }
 
-        internal async Task EnsureProviderInformationAsync(CancellationToken cancellationToken)
+        protected async Task EnsureProviderInformationAsync(CancellationToken cancellationToken)
         {
             _logger.LogTrace("EnsureProviderInformation");
 
@@ -391,7 +391,7 @@ namespace IdentityModel.OidcClient
                     }
                 }
 
-                var discoveryClient = Options.CreateClient();
+                var discoveryClient = Options.CreateBackchannelClient();
                 var disco = await discoveryClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                 {
                     Address = Options.Authority,
