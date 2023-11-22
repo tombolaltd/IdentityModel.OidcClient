@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <PackageId>IdentityModel.OidcClient.IdentityTokenValidator</PackageId>
-        <RootNamespace>IdentityModel.OidcClient</RootNamespace>
-        <AssemblyName>IdentityModel.OidcClient.IdentityTokenValidator</AssemblyName>
+        <PackageId>Tombola.IdentityModel.OidcClient.IdentityTokenValidator</PackageId>
+        <RootNamespace>Tombola.IdentityModel.OidcClient</RootNamespace>
+        <AssemblyName>Tombola.IdentityModel.OidcClient.IdentityTokenValidator</AssemblyName>
         
         <TargetFramework>netstandard2.0</TargetFramework>
     
@@ -13,20 +13,11 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
-        <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-
         <!-- Embed source files that are not tracked by the source control manager in the PDB -->
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
 
         <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
         <DebugType>embedded</DebugType>
-
-        <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">True</ContinuousIntegrationBuild>
-        
-        <AssemblyOriginatorKeyFile>../../key.snk</AssemblyOriginatorKeyFile>
-        <SignAssembly>true</SignAssembly>
-        <PublicSign Condition="'$(OS)' != 'Windows_NT'">true</PublicSign>
     </PropertyGroup>
 
     <ItemGroup>
