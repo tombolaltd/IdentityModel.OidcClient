@@ -6,9 +6,17 @@ using System.Net.Http;
 
 namespace IdentityModel.OidcClient.Infrastructure
 {
-    internal static class OidcClientOptionsExtensions
+    /// <summary>
+    /// Extension methods over <see cref="OidcClientOptions"/>
+    /// </summary>
+    public static class OidcClientOptionsExtensions
     {
-        public static HttpClient CreateClient(this OidcClientOptions options)
+        /// <summary>
+        /// Creates an <see cref="HttpClient"/> configured for backchannel requests to the authorization server
+        /// </summary>
+        /// <param name="options">Client options</param>
+        /// <returns>A new <see cref="HttpClient"/></returns>
+        public static HttpClient CreateBackchannelClient(this OidcClientOptions options)
         {
             if (options.HttpClientFactory != null)
             {
