@@ -42,6 +42,17 @@ namespace IdentityModel.OidcClient
         /// <param name="options">The options.</param>
         /// <exception cref="System.ArgumentNullException">options</exception>
         public OidcClient(OidcClientOptions options)
+            : this(options, (clientOptions, EnsureProviderInformationAsync) => new ResponseProcessor(clientOptions, EnsureProviderInformationAsync))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OidcClient"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="responseProcessorFactory">Factory function to use a custom override of <see cref="ResponseProcessor"/></param>
+        /// <exception cref="System.ArgumentNullException">options</exception>
+        public OidcClient(OidcClientOptions options, Func<OidcClientOptions, Func<CancellationToken, Task>, ResponseProcessor> responseProcessorFactory)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
 
@@ -54,7 +65,7 @@ namespace IdentityModel.OidcClient
             Options = options;
             _logger = options.LoggerFactory.CreateLogger<OidcClient>();
             _authorizeClient = new AuthorizeClient(options);
-            _processor = new ResponseProcessor(options, EnsureProviderInformationAsync);
+            _processor = responseProcessorFactory(options, EnsureProviderInformationAsync);
         }
 
         /// <summary>
@@ -366,7 +377,7 @@ namespace IdentityModel.OidcClient
             };
         }
 
-        protected async Task EnsureConfigurationAsync(CancellationToken cancellationToken)
+        protected internal async Task EnsureConfigurationAsync(CancellationToken cancellationToken)
         {
             await EnsureProviderInformationAsync(cancellationToken);
 
@@ -374,7 +385,7 @@ namespace IdentityModel.OidcClient
             _logger.LogTrace(LogSerializer.Serialize(Options));
         }
 
-        protected async Task EnsureProviderInformationAsync(CancellationToken cancellationToken)
+        protected internal async Task EnsureProviderInformationAsync(CancellationToken cancellationToken)
         {
             _logger.LogTrace("EnsureProviderInformation");
 
