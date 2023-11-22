@@ -20,15 +20,10 @@
         <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
         <DebugType>embedded</DebugType>
     </PropertyGroup>
-
-    <ItemGroup>
-        <None Include="../../icon.jpg" Pack="true" Visible="false" PackagePath="" />
-    </ItemGroup>
     
     <ItemGroup>
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     </ItemGroup>
     
     <ItemGroup>
