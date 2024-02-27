@@ -15,10 +15,13 @@ using System.Threading.Tasks;
 
 namespace IdentityModel.OidcClient
 {
-    internal class ResponseProcessor
+    /// <summary>
+    /// Encapsulates processing of OIDC responses
+    /// </summary>
+    public class ResponseProcessor
     {
-        private readonly OidcClientOptions _options;
-        private readonly ILogger<ResponseProcessor> _logger;
+        protected readonly OidcClientOptions _options;
+        protected readonly ILogger<ResponseProcessor> _logger;
         private readonly CryptoHelper _crypto;
         private readonly Func<CancellationToken, Task> _refreshKeysAsync;
 
@@ -99,7 +102,7 @@ namespace IdentityModel.OidcClient
             };
         }
 
-        internal async Task<TokenResponseValidationResult> ValidateTokenResponseAsync(TokenResponse response, AuthorizeState state, bool requireIdentityToken, CancellationToken cancellationToken = default)
+        public virtual async Task<TokenResponseValidationResult> ValidateTokenResponseAsync(TokenResponse response, AuthorizeState state, bool requireIdentityToken, CancellationToken cancellationToken = default)
         {
             _logger.LogTrace("ValidateTokenResponse");
 
@@ -180,7 +183,7 @@ namespace IdentityModel.OidcClient
         {
             _logger.LogTrace("RedeemCodeAsync");
 
-            var client = _options.CreateClient();
+            var client = _options.CreateBackchannelClient();
             var tokenResult = await client.RequestAuthorizationCodeTokenAsync(new AuthorizationCodeTokenRequest
             {
                 Address = _options.ProviderInformation.TokenEndpoint,

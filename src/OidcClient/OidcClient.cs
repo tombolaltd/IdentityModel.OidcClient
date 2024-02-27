@@ -22,11 +22,11 @@ namespace IdentityModel.OidcClient
     /// </summary>
     public class OidcClient
     {
-        private readonly ILogger _logger;
+        protected readonly ILogger _logger;
         private readonly AuthorizeClient _authorizeClient;
 
         private readonly bool _useDiscovery;
-        private readonly ResponseProcessor _processor;
+        protected readonly ResponseProcessor _processor;
 
         /// <summary>
         /// Gets the options.
@@ -42,6 +42,17 @@ namespace IdentityModel.OidcClient
         /// <param name="options">The options.</param>
         /// <exception cref="System.ArgumentNullException">options</exception>
         public OidcClient(OidcClientOptions options)
+            : this(options, (clientOptions, EnsureProviderInformationAsync) => new ResponseProcessor(clientOptions, EnsureProviderInformationAsync))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OidcClient"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        /// <param name="responseProcessorFactory">Factory function to use a custom override of <see cref="ResponseProcessor"/></param>
+        /// <exception cref="System.ArgumentNullException">options</exception>
+        public OidcClient(OidcClientOptions options, Func<OidcClientOptions, Func<CancellationToken, Task>, ResponseProcessor> responseProcessorFactory)
         {
             if (options == null) throw new ArgumentNullException(nameof(options));
 
@@ -54,7 +65,7 @@ namespace IdentityModel.OidcClient
             Options = options;
             _logger = options.LoggerFactory.CreateLogger<OidcClient>();
             _authorizeClient = new AuthorizeClient(options);
-            _processor = new ResponseProcessor(options, EnsureProviderInformationAsync);
+            _processor = responseProcessorFactory(options, EnsureProviderInformationAsync);
         }
 
         /// <summary>
@@ -285,7 +296,7 @@ namespace IdentityModel.OidcClient
             if (accessToken.IsMissing()) throw new ArgumentNullException(nameof(accessToken));
             if (!Options.ProviderInformation.SupportsUserInfo) throw new InvalidOperationException("No userinfo endpoint specified");
 
-            var userInfoClient = Options.CreateClient();
+            var userInfoClient = Options.CreateBackchannelClient();
 
             var userInfoResponse = await userInfoClient.GetUserInfoAsync(new UserInfoRequest
             {
@@ -326,7 +337,7 @@ namespace IdentityModel.OidcClient
             await EnsureConfigurationAsync(cancellationToken);
             backChannelParameters = backChannelParameters ?? new Parameters();
             
-            var client = Options.CreateClient();
+            var client = Options.CreateBackchannelClient();
 
             var response = await client.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
@@ -366,7 +377,7 @@ namespace IdentityModel.OidcClient
             };
         }
 
-        internal async Task EnsureConfigurationAsync(CancellationToken cancellationToken)
+        protected internal async Task EnsureConfigurationAsync(CancellationToken cancellationToken)
         {
             await EnsureProviderInformationAsync(cancellationToken);
 
@@ -374,7 +385,7 @@ namespace IdentityModel.OidcClient
             _logger.LogTrace(LogSerializer.Serialize(Options));
         }
 
-        internal async Task EnsureProviderInformationAsync(CancellationToken cancellationToken)
+        protected internal async Task EnsureProviderInformationAsync(CancellationToken cancellationToken)
         {
             _logger.LogTrace("EnsureProviderInformation");
 
@@ -391,7 +402,7 @@ namespace IdentityModel.OidcClient
                     }
                 }
 
-                var discoveryClient = Options.CreateClient();
+                var discoveryClient = Options.CreateBackchannelClient();
                 var disco = await discoveryClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
                 {
                     Address = Options.Authority,
