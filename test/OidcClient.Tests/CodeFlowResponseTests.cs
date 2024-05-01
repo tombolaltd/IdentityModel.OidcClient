@@ -351,7 +351,7 @@ namespace IdentityModel.OidcClient.Tests
             var result = await client.ProcessResponseAsync(url, state);
 
             result.IsError.Should().BeTrue();
-            result.Error.Should().StartWith("Error redeeming code: error");
+            result.Error.Should().Be("error");
         }
 
         [Fact]
