@@ -4,7 +4,7 @@
     <PackageId>Tombola.IdentityModel.OidcClient</PackageId>
     <RootNamespace>Tombola.IdentityModel.OidcClient</RootNamespace>
     <AssemblyName>Tombola.IdentityModel.OidcClient</AssemblyName>
-    <PackageVersion>5.1.2</PackageVersion>
+    <PackageVersion>5.1.3</PackageVersion>
     
     <TargetFramework>netstandard2.0</TargetFramework>
     

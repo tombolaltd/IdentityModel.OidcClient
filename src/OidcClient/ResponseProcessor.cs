@@ -80,11 +80,11 @@ namespace IdentityModel.OidcClient
             var tokenResponse = await RedeemCodeAsync(authorizeResponse.Code, state, backChannelParameters, cancellationToken);
             if (tokenResponse.IsError)
             {
-                return new ResponseValidationResult($"Error redeeming code: {tokenResponse.Error ?? "no error code"} / {tokenResponse.ErrorDescription ?? "no description"}");
+                return new ResponseValidationResult(tokenResponse.Error, $"Error redeeming code: {tokenResponse.ErrorDescription}");
             }
             if (tokenResponse.HttpStatusCode != HttpStatusCode.OK)
             {
-                return new ResponseValidationResult($"Error redeeming code: {tokenResponse.Raw}");
+                return new ResponseValidationResult(tokenResponse.Error, $"Error redeeming code: {tokenResponse.Raw}");
             }
 
             // validate token response

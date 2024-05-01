@@ -24,9 +24,11 @@ namespace IdentityModel.OidcClient
         /// Error constructor
         /// </summary>
         /// <param name="error"></param>
-        public ResponseValidationResult(string error)
+        /// <param name="errorDescription"></param>
+        public ResponseValidationResult(string error, string errorDescription = null)
         {
             Error = error;
+            ErrorDescription = errorDescription;
         }
 
         /// <summary>
