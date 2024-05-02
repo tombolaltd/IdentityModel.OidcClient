@@ -334,7 +334,7 @@ namespace IdentityModel.OidcClient
         {
             _logger.LogTrace("RefreshTokenAsync");
 
-            await EnsureConfigurationAsync(cancellationToken);
+            await EnsureConfigurationAsync(cancellationToken).ConfigureAwait(false);
             backChannelParameters = backChannelParameters ?? new Parameters();
             
             var client = Options.CreateBackchannelClient();
@@ -379,7 +379,7 @@ namespace IdentityModel.OidcClient
 
         protected internal async Task EnsureConfigurationAsync(CancellationToken cancellationToken)
         {
-            await EnsureProviderInformationAsync(cancellationToken);
+            await EnsureProviderInformationAsync(cancellationToken).ConfigureAwait(false);
 
             _logger.LogTrace("Effective options:");
             _logger.LogTrace(LogSerializer.Serialize(Options));
