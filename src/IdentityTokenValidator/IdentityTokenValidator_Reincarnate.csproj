@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>Tombola.IdentityModel.OidcClient.IdentityTokenValidator</PackageId>
+        <RootNamespace>Tombola.IdentityModel.OidcClient</RootNamespace>
+        <AssemblyName>Tombola.IdentityModel.OidcClient.IdentityTokenValidator</AssemblyName>
+		<PackageVersion>5.1.2</PackageVersion>
+        
+        <TargetFramework>netstandard2.0</TargetFramework>
+    
+        <PackageTags>OAuth2;OAuth 2.0;OpenID Connect;Security;Identity;IdentityServer</PackageTags>
+        <Description>Identity token validator for IdentityModeo.OidcClient ased on the Microsoft JWT handler</Description>
+        <Authors>Dominick Baier;Brock Allen</Authors>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+        <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+        <!-- Recommended: Embed symbols containing Source Link in the main file (exe/dll) -->
+        <DebugType>embedded</DebugType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Server.WebListener" Version="1.1.1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\OidcClient\OidcClient.csproj" />
+    </ItemGroup>
+
+</Project>
